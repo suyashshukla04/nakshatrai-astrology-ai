@@ -10,7 +10,7 @@ class SiteConfigManager {
         const sites = [
             {
                 id: 'astroai',
-                domain: 'astrologyai.com',
+                domain: 'nakshatrai.com',
                 niche: 'astrology predictions',
                 author: 'AstroAI-Master',
                 brandName: 'AI Astrology Insights',

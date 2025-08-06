@@ -16,7 +16,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://astrologyai.com',
+    url: 'https://nakshatrai.com',
     title: 'Astrology AI Platform - Ancient Wisdom Meets Modern AI',
     description: 'AI-powered astrology predictions combining ancient Vedic wisdom with modern insights.',
     siteName: 'Astrology AI Platform',
@@ -51,10 +51,10 @@ export default function RootLayout({ children }) {
               "@type": "WebSite",
               "name": "Astrology AI Platform",
               "description": "AI-powered astrology predictions combining ancient Vedic wisdom with modern insights",
-              "url": "https://astrologyai.com",
+              "url": "https://nakshatrai.com",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://astrologyai.com/search?q={search_term_string}",
+                "target": "https://nakshatrai.com/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })

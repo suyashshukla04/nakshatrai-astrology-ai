@@ -89,7 +89,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-light-text dark:text-dark-text">Email</h3>
-                    <p className="text-light-text-secondary dark:text-dark-text-secondary">contact@astrologyai.com</p>
+                    <p className="text-light-text-secondary dark:text-dark-text-secondary">contact@nakshatrai.com</p>
                     <p className="text-sm text-light-text-muted dark:text-dark-text-muted mt-1">
                       AstroAI Master responds within 24 hours
                     </p>

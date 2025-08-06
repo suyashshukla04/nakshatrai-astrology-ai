@@ -32,7 +32,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-bold text-light-text dark:text-dark-text group-hover:text-cosmic-500 transition-colors leading-tight">
-                Astrology AI
+                NakshatrAI
               </span>
               <span className="text-xs text-light-text-muted dark:text-dark-text-muted -mt-0.5 leading-none">
                 Ancient Wisdom • Modern AI

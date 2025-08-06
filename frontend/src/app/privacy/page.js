@@ -105,8 +105,8 @@ export default function PrivacyPage() {
                 </p>
                 <div className="flex items-center space-x-2">
                   <span className="text-green-600 dark:text-green-400">✉️</span>
-                  <a href="mailto:contact@astrologyai.com" className="text-green-600 dark:text-green-400 hover:underline">
-                    contact@astrologyai.com
+                  <a href="mailto:contact@nakshatrai.com" className="text-green-600 dark:text-green-400 hover:underline">
+                    contact@nakshatrai.com
                   </a>
                 </div>
               </div>
