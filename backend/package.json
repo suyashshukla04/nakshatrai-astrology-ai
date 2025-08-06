@@ -1,7 +1,7 @@
 {
-  "name": "mobile-tech-automation-v2-backend",
+  "name": "astrology-ai-platform-backend",
   "version": "2.0.0",
-  "description": "Two-AI Content Generation Backend",
+  "description": "Modular AI Content Platform - Astrology Backend",
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=production node server.js",

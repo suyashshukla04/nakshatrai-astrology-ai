@@ -1,4 +1,4 @@
-//C:\Users\suyas\mobile-tech-automation-v2\backend\server.js
+//C:\Users\suyas\astrology-ai-platform\backend\server.js
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -15,28 +15,28 @@ app.use(express.json());
 const testRoutes = require('./routes/testRoute');
 const articleRoutes = require('./routes/articleRoutes');
 const contactRoutes = require('./routes/contactRoutes');
-const demoRoutes = require("./routes/demoRoutes")
+const demoRoutes = require('./routes/demoRoutes');
+const spacesTestRoutes = require('./routes/spacesTestRoutes');
+
 app.use('/api', contactRoutes);
 app.use('/api', testRoutes);
 app.use('/api', articleRoutes);
-app.use('/api',demoRoutes)
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/techai')
-    .then(() => console.log('✅ MongoDB connected'))
+app.use('/api', demoRoutes);
+app.use('/api', spacesTestRoutes);
+
+// MongoDB connection for astrology platform
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/astroai')
+    .then(() => console.log('✅ MongoDB connected - Astrology AI Platform'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// Initialize scheduler
+// Initialize scheduler for astrology automation
 const scheduler = require('./config/scheduler');
 scheduler.initializeAllSites();
 
 const PORT = process.env.BACKEND_PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`��� Backend server running on port ${PORT}`);
-    console.log(`��� API endpoints: http://localhost:${PORT}/api`);
+    console.log(`🌟 Astrology AI Platform server running on port ${PORT}`);
+    console.log(`🔗 API endpoints: http://localhost:${PORT}/api`);
 });
 
 module.exports = app;
-
-// Add Spaces test routes
-const spacesTestRoutes = require('./routes/spacesTestRoutes');
-app.use('/api', spacesTestRoutes);

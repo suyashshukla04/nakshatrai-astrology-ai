@@ -1,3 +1,5 @@
+//C:\Users\suyas\astrology-ai-platform\backend\routes\spacesTestRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const SpacesService = require('../services/spacesService');

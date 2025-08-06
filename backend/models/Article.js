@@ -7,9 +7,9 @@ const articleSchema = new mongoose.Schema({
     category: { type: String, required: true },
     niche: { type: String, required: true },
     siteId: { type: String, required: true },
-    featuredImage: { type: String }, // CDN URL from Spaces
-    originalImageUrl: { type: String }, // Original DALL-E URL
-    imageKey: { type: String }, // Spaces key for management
+    featuredImage: { type: String },
+    originalImageUrl: { type: String },
+    imageKey: { type: String },
     imageUploaded: { type: Boolean, default: false },
     author: { type: String, required: true },
     publishedAt: { type: Date, default: Date.now },
@@ -18,12 +18,34 @@ const articleSchema = new mongoose.Schema({
     tags: [String],
     readingTime: { type: Number },
     wordCount: { type: Number },
-    status: { type: String, enum: ['draft', 'published'], default: 'published' }
+    
+    // NEW: Astrology-specific fields
+    language: { type: String, enum: ['english', 'hindi'], default: 'english' },
+    zodiacSign: { type: String },
+    planetaryInfluence: { type: String },
+    luckyNumbers: [Number],
+    luckyColors: [String],
+    auspiciousTime: { type: String },
+    compatibilityScore: { type: Number, min: 0, max: 100 },
+    recommendedGemstone: {
+        english: String,
+        hindi: String,
+        planet: String
+    },
+    
+    // AI and content metadata
+    aiModel: { type: String, default: 'gemini-2.5-flash' },
+    contentStyle: { type: String, default: 'practical-astrology' },
+    qualityScore: { type: Number },
+    mythologyReferences: [String]
 }, {
-    timestamps: true
+    timestamps: true,
+    collection: 'astrology_articles'
 });
 
+// Indexes for astrology queries
 articleSchema.index({ siteId: 1, category: 1, publishedAt: -1 });
-articleSchema.index({ slug: 1, siteId: 1 }, { unique: true });
+articleSchema.index({ language: 1, zodiacSign: 1 });
+articleSchema.index({ slug: 1 }, { unique: true });
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('AstrologyArticle', articleSchema);
