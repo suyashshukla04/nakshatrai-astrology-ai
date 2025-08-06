@@ -33,7 +33,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/astroai')
 const scheduler = require('./config/scheduler');
 scheduler.initializeAllSites();
 
-const PORT = process.env.BACKEND_PORT || 5000;
+const PORT = process.env.BACKEND_PORT || 5001;
 app.listen(PORT, () => {
     console.log(`🌟 Astrology AI Platform server running on port ${PORT}`);
     console.log(`🔗 API endpoints: http://localhost:${PORT}/api`);
