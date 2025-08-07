@@ -398,86 +398,110 @@
 // module.exports = AstrologyContentGenerator;
 
 
-// generators/VedicContentGenerator.js - HINDI-FIRST COMPLETE ASTROLOGY PLATFORM
-const VedicTopicGenerator = require('./VedicTopicGenerator');
+// backend/generators/ContentGenerator.js - 100% HINDI ASTROLOGY PLATFORM
+const DynamicTopicGenerator = require('./DynamicTopicGenerator');
 const siteConfig = require('../config/siteConfig');
 const Article = require('../models/Article');
 const SpacesService = require('../services/spacesService');
+const OpenAI = require('openai');
 
-class VedicContentGenerator {
+class AstrologyContentGenerator {
     constructor(siteId) {
         this.siteId = siteId;
         this.config = siteConfig.getConfig(siteId);
-        this.topicGenerator = new VedicTopicGenerator(siteId);
+        this.topicGenerator = new DynamicTopicGenerator(siteId);
         this.spacesService = new SpacesService();
+        
+        // Initialize OpenAI for DALL-E image generation
+        this.openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY
+        });
         
         // Initialize Gemini for content generation
         const { GoogleGenerativeAI } = require('@google/generative-ai');
         this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        
+        this.model = this.genAI.getGenerativeModel({ 
+            model: 'gemini-2.5-flash',
+            generationConfig: {
+                temperature: 0.7,
+                topP: 0.8,
+                topK: 40,
+                maxOutputTokens: 4096,
+            }
+        });
+
         // Initialize Perplexity for real-time content
         this.perplexityApiKey = process.env.PERPLEXITY_API_KEY;
     }
 
-    // Content language - Hindi first
+    // CHANGED: Always return Hindi (removed language selection logic)
     determineContentLanguage() {
-        const languages = this.config.languages;
-        const ratio = languages.contentRatio;
-        
-        // 80% Hindi, 20% English for Hindi-first approach
-        const random = Math.random() * 100;
-        return random < 80 ? 'hindi' : 'english';
+        return 'hindi'; // Always Hindi now
     }
 
-    // Get localized zodiac sign in Hindi
-    getLocalizedRashi(language = 'hindi') {
-        const rashis = this.config.dynamicSeeds.zodiacSigns;
-        const randomRashi = rashis[Math.floor(Math.random() * rashis.length)];
-        return language === 'hindi' ? randomRashi.hindi : randomRashi.english;
+    // CHANGED: Get Hindi zodiac sign by default
+    getLocalizedZodiacSign(language = 'hindi') {
+        const signs = this.config.dynamicSeeds.zodiacSigns;
+        const randomSign = signs[Math.floor(Math.random() * signs.length)];
+        return randomSign[language] || randomSign.hindi; // Default to Hindi
     }
 
-    // Get localized planet in Hindi
-    getLocalizedGraha(language = 'hindi') {
-        const grahas = this.config.dynamicSeeds.planetaryBodies;
-        const randomGraha = grahas[Math.floor(Math.random() * grahas.length)];
-        return language === 'hindi' ? randomGraha.hindi : randomGraha.english;
+    // CHANGED: Get Hindi planet by default
+    getLocalizedPlanet(language = 'hindi') {
+        const planets = this.config.dynamicSeeds.planetaryBodies;
+        const randomPlanet = planets[Math.floor(Math.random() * planets.length)];
+        return randomPlanet[language] || randomPlanet.hindi; // Default to Hindi
     }
 
-    // Clean Hindi content formatting
-    cleanAndFormatHindiContent(content) {
+    // Clean markdown symbols from title
+    cleanMarkdownFromTitle(title) {
+        return title
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/#{1,6}\s*/g, '')
+            .replace(/`(.*?)`/g, '$1')
+            .replace(/\n/g, ' ')
+            .replace(/"/g, '')
+            .trim();
+    }
+
+    // Clean and format content
+    cleanAndFormatContent(content) {
         return content
-            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-orange-800">$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em class="italic text-orange-700">$1</em>')
-            .replace(/#{3}\s*(.*?)$/gm, '<h3 class="text-xl font-bold text-orange-800 mt-6 mb-3 flex items-center"><span class="mr-2">🌟</span>$1</h3>')
-            .replace(/#{2}\s*(.*?)$/gm, '<h2 class="text-2xl font-bold text-orange-800 mt-8 mb-4 flex items-center"><span class="mr-2">✨</span>$1</h2>')
-            .replace(/#{1}\s*(.*?)$/gm, '<h1 class="text-3xl font-bold text-orange-800 mt-10 mb-6 flex items-center"><span class="mr-2">🕉️</span>$1</h1>')
-            .replace(/\n\n/g, '</p><p class="mb-4 leading-relaxed text-gray-800 hindi-text">')
-            .replace(/^(.*)$/gm, '<p class="mb-4 leading-relaxed text-gray-800 hindi-text">$1</p>')
-            .replace(/<p class="mb-4 leading-relaxed text-gray-800 hindi-text"><\/p>/g, '')
-            .replace(/<p class="mb-4 leading-relaxed text-gray-800 hindi-text"><h/g, '<h')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/#{3}\s*(.*?)$/gm, '<h3>$1</h3>')
+            .replace(/#{2}\s*(.*?)$/gm, '<h2>$1</h2>')
+            .replace(/#{1}\s*(.*?)$/gm, '<h1>$1</h1>')
+            .replace(/"/g, '')
+            .replace(/'/g, "'")
+            .replace(/💡\s*\n/g, '')
+            .replace(/🤔\s*\n/g, '')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/^(.*)$/gm, '<p>$1</p>')
+            .replace(/<p><\/p>/g, '')
+            .replace(/<p><h/g, '<h')
             .replace(/<\/h([1-6])><\/p>/g, '</h$1>')
-            // Add special formatting for mantras and Sanskrit text
-            .replace(/(ॐ [^।]+।?)/g, '<span class="sanskrit-text text-orange-900 font-bold bg-yellow-100 px-2 py-1 rounded border border-orange-300">$1</span>')
+            .replace(/<p>\s*<\/p>/g, '')
             .replace(/\s+/g, ' ')
-            .replace(/<p class="mb-4 leading-relaxed text-gray-800 hindi-text">\s+/g, '<p class="mb-4 leading-relaxed text-gray-800 hindi-text">')
+            .replace(/<p>\s+/g, '<p>')
             .replace(/\s+<\/p>/g, '</p>');
     }
 
-    // Generate Vedic content with Hindi focus
-    async generateVedicContent(topic, category, language) {
+    // CHANGED: Always generate Hindi content (removed language parameter logic)
+    async generateAstrologyContent(topic, category, language = 'hindi') {
         const cleanTopic = this.cleanMarkdownFromTitle(topic);
         
-        // Use Perplexity for real-time categories
-        const usePerplexity = ['daily-rashifal', 'shubh-muhurat', 'graha-gochar'].includes(category);
+        // Determine which AI to use based on category
+        const usePerplexity = ['daily-horoscope', 'lucky-suggestions', 'muhurat-timing'].includes(category);
         
-        // Get localized astrology data
-        const rashi = this.getLocalizedRashi(language);
-        const graha = this.getLocalizedGraha(language);
+        // Get Hindi astrology data
+        const zodiacSign = this.getLocalizedZodiacSign('hindi');
+        const planet = this.getLocalizedPlanet('hindi');
         
-        // Language-specific prompts - Hindi first
-        const prompt = language === 'hindi' 
-            ? this.getVedicHindiPrompt(cleanTopic, category, rashi, graha)
-            : this.getVedicEnglishPrompt(cleanTopic, category, rashi, graha);
+        // CHANGED: Always use Hindi prompt
+        const prompt = this.getHindiPrompt(cleanTopic, category, zodiacSign, planet);
 
         try {
             let content;
@@ -488,103 +512,76 @@ class VedicContentGenerator {
                 content = await this.generateWithGemini(prompt);
             }
             
-            content = language === 'hindi' 
-                ? this.cleanAndFormatHindiContent(content)
-                : this.cleanAndFormatContent(content);
+            content = this.cleanAndFormatContent(content);
             
             return {
                 content,
-                language,
-                rashi,
-                graha
+                language: 'hindi', // Always Hindi
+                zodiacSign,
+                planet
             };
         } catch (error) {
-            console.error('Vedic content generation error:', error);
+            console.error('Astrology content generation error:', error);
             throw error;
         }
     }
 
-    // Vedic Hindi content prompt
-    getVedicHindiPrompt(topic, category, rashi, graha) {
-        return `आप एक ज्ञानी वैदिक ज्योतिषी हैं जो प्राचीन संस्कृत ग्रंथों के गहन अध्ययन के साथ आधुनिक जीवन में व्यावहारिक मार्गदर्शन प्रदान करते हैं। इस विषय पर लिखें: "${topic}"
+    // REMOVED: English prompt method (not needed anymore)
 
-विशेष दृष्टिकोण - व्यावहारिक वैदिक ज्ञान:
-जैसे हनुमान जी संजीवनी पर्वत लेकर आए (जो वास्तव में असंख्य औषधीय जड़ी-बूटियों का प्रतीक था), वैसे ही ज्योतिषीय अवधारणाओं को व्यावहारिक जीवन समाधानों के माध्यम से समझाएं।
+    // ENHANCED: Hindi content prompt for 100% Hindi audience
+    getHindiPrompt(topic, category, zodiacSign, planet) {
+        return `आप एक अनुभवी ज्योतिष विशेषज्ञ हैं जो प्राचीन वैदिक ज्ञान को आधुनिक जीवन के व्यावहारिक मार्गदर्शन के साथ जोड़ते हैं। भारतीय हिंदी भाषी दर्शकों के लिए इस विषय पर विस्तृत लेख लिखें: "${topic}"
+
+विशेष दृष्टिकोण - व्यावहारिक ज्योतिष:
+जैसे हनुमानजी संजीवनी पर्वत लाए (जो वास्तव में अनेक औषधीय जड़ी-बूटियों का प्रतीक था), वैसे ही ज्योतिषीय अवधारणाओं को व्यावहारिक अनुप्रयोगों के माध्यम से समझाएं।
 
 वर्तमान कॉस्मिक संदर्भ:
-- मुख्य राशि: ${rashi}
-- ग्रह प्रभाव: ${graha}
+- राशि: ${zodiacSign}
+- ग्रह प्रभाव: ${planet}
 - श्रेणी: ${category}
-- आज की तारीख: ${new Date().toLocaleDateString('hi-IN')}
 
-लेखन शैली:
-- रामायण/महाभारत की प्रेरणादायक कहानियों का उपयोग करें
-- ज्योतिषीय प्रभावों का वैज्ञानिक और मनोवैज्ञानिक कारण बताएं
-- व्यावहारिक, तुरंत लागू होने योग्य सलाह दें
-- अंधविश्वास से दूर रहें, तर्कसंगत समझाएं
-- सशक्तिकरण और आत्मविश्वास पर ध्यान दें
-- प्राचीन श्लोकों और मंत्रों का सही संदर्भ के साथ उपयोग करें
+लेखन शैली (हिंदी दर्शकों के लिए):
+- रामायण/महाभारत की कहानियों का उपयोग करके बिंदुओं को स्पष्ट करें
+- ज्योतिषीय प्रभावों का मनोवैज्ञानिक कारण बताएं
+- व्यावहारिक, विशिष्ट सलाह दें जो दैनिक जीवन में उपयोगी हो
+- अंधविश्वास की भाषा से बचें, तर्कसंगत व्याख्या करें
+- पाठकों को सशक्त बनाने और ज्ञान बढ़ाने पर ध्यान दें
+- भारतीय संस्कृति और परंपराओं का सम्मान करें
 
-सामग्री संरचना (1200+ शब्द):
-## प्राचीन वैदिक ज्ञान से आधुनिक जीवन समाधान (200 शब्द)
-## ज्योतिषीय विश्लेषण और वैज्ञानिक दृष्टिकोण (400 शब्द)  
-## व्यावहारिक अनुप्रयोग और तुरंत करने योग्य कार्य (400 शब्द)
-## महान ग्रंथों से प्रेरणा और आधुनिक चुनौतियों का समाधान (200 शब्द)
+सामग्री संरचना (कम से कम 1200 शब्द):
+## प्राचीन ज्ञान का आधुनिक जीवन से मेल (200 शब्द)
+- वैदिक ज्योतिष का वैज्ञानिक आधार
+- आज के समय में इसकी प्रासंगिकता
 
-स्वर: ज्ञानी परंतु मित्रवत, एक अनुभवी पंडित जी की तरह
-भाषा: शुद्ध हिंदी संस्कृत शब्दावली के साथ, जटिल शब्दों का सरल अर्थ भी दें
-फोकस: व्यावहारिक ज्ञान जो पाठक आज ही अपने जीवन में उपयोग कर सकें
+## ज्योतिषीय दृष्टिकोण (400 शब्द)
+- ${zodiacSign} और ${planet} का प्रभाव
+- इस विषय का गहरा ज्योतिषीय विश्लेषण
+- शास्त्रीय ग्रंथों के अनुसार व्याख्या
 
-महत्वपूर्ण निर्देश:
-- हर सलाह के साथ "क्यों" का उत्तर दें
-- प्राचीन उदाहरणों को आधुनिक संदर्भ में समझाएं
-- मंत्रों का अर्थ और उच्चारण विधि भी बताएं
-- शुभ समय, रंग, दिशा आदि की वैज्ञानिक व्याख्या करें
+## व्यावहारिक अनुप्रयोग और सुझाव (400 शब्द)
+- दैनिक जीवन में कैसे उपयोग करें
+- व्यावहारिक उपाय और तरीके
+- सफलता के लिए कार्य योजना
 
-अब पूरा वैदिक ज्योतिष लेख हिंदी में लिखें:`;
+## आधुनिक चुनौतियों के लिए प्राचीन समाधान (200 शब्द)
+- पुराणों और महाकाव्यों से सीख
+- आज की समस्याओं का प्राचीन समाधान
+
+भाषा और स्वर:
+- शुद्ध हिंदी में लेकिन सरल और समझने योग्य
+- संस्कृत शब्दों का उपयोग करें लेकिन उनका अर्थ भी स्पष्ट करें
+- मित्रवत लेकिन ज्ञानपूर्ण स्वर बनाए रखें
+- पाठकों से सीधा संवाद करें
+
+फोकस:
+- व्यावहारिक ज्ञान और वास्तविक अनुप्रयोग
+- भारतीय जीवनशैली के अनुकूल सुझाव
+- आत्मनिर्भरता और सकारात्मक सोच को बढ़ावा
+
+अब पूरा लेख हिंदी में लिखें:`;
     }
 
-    // English Vedic content prompt
-    getVedicEnglishPrompt(topic, category, rashi, graha) {
-        return `You are a wise Vedic astrologer combining ancient Sanskrit wisdom with practical modern life guidance. Write about: "${topic}"
-
-UNIQUE APPROACH - PRACTICAL VEDIC WISDOM:
-Like Hanuman bringing the Sanjeevani mountain (representing abundant healing herbs, not literal mountain), explain Vedic astrological concepts through practical applications that people can use today.
-
-CURRENT COSMIC CONTEXT:
-- Featured Rashi: ${rashi}
-- Graha Influence: ${graha}
-- Category: ${category}
-- Today's Date: ${new Date().toLocaleDateString('en-IN')}
-
-WRITING STYLE:
-- Use stories from Ramayana/Mahabharata to illustrate points
-- Explain WHY Vedic influences work psychologically and scientifically
-- Provide actionable, specific advice
-- Avoid superstitious language, focus on logical understanding
-- Emphasize empowerment and wisdom
-- Include authentic Sanskrit terms with proper explanations
-
-CONTENT STRUCTURE (1200+ words):
-## Ancient Vedic Wisdom Meets Modern Life (200 words)
-## Astrological Analysis and Scientific Perspective (400 words)  
-## Practical Applications and Immediate Actions (400 words)
-## Epic Stories for Modern Challenges (200 words)
-
-TONE: Wise but accessible, like a knowledgeable Pandit ji
-LANGUAGE: Clear English with Sanskrit terms properly explained
-FOCUS: Practical wisdom and real-world applications
-
-Important Guidelines:
-- Explain the "why" behind every advice
-- Connect ancient examples to modern contexts
-- Include mantra meanings and pronunciation
-- Give scientific explanations for timing, colors, directions
-
-Write the complete Vedic astrology article now:`;
-    }
-
-    // Generate with Perplexity for real-time data
+    // Generate with Perplexity (for real-time content) - UPDATED Hindi prompt
     async generateWithPerplexity(prompt) {
         const response = await fetch('https://api.perplexity.ai/chat/completions', {
             method: 'POST',
@@ -594,8 +591,11 @@ Write the complete Vedic astrology article now:`;
             },
             body: JSON.stringify({
                 model: 'sonar',
-                messages: [{ role: 'user', content: prompt }],
-                max_tokens: 1200,
+                messages: [{ 
+                    role: 'user', 
+                    content: prompt + "\n\nकृपया उत्तर हिंदी में दें।" // Always request Hindi response
+                }],
+                max_tokens: 1000,
                 temperature: 0.7,
                 top_p: 0.8,
                 stream: false
@@ -610,117 +610,93 @@ Write the complete Vedic astrology article now:`;
         return data.choices[0].message.content;
     }
 
-    // Generate with Gemini
+    // Generate with Gemini (for analytical content)
     async generateWithGemini(prompt) {
-        const model = this.genAI.getGenerativeModel({ 
-            model: 'gemini-2.5-flash',
-            generationConfig: {
-                temperature: 0.7,
-                topP: 0.8,
-                topK: 40,
-                maxOutputTokens: 4096,
-            }
-        });
-        
-        const result = await model.generateContent(prompt);
+        const result = await this.model.generateContent(prompt);
         return result.response.text();
     }
 
-    // Main article generation method
-    async generateCompleteVedicArticle(category) {
+    // Generate themed astrology image
+    async generateThemedImage(topic, category) {
         try {
-            // Hindi-first language determination
-            const language = this.determineContentLanguage();
-            
-            console.log(`🕉️ Generating ${category} vedic article in ${language}...`);
+            console.log(`🎨 Generating astrology image for: ${topic}`);
+            const imageResult = await this.spacesService.generateAndUploadThemedImage(topic, category);
+            return imageResult;
+        } catch (error) {
+            console.error('❌ Astrology image generation error:', error);
+            return null;
+        }
+    }
 
-            // Generate dynamic topic using VedicTopicGenerator
+    // CHANGED: Main article generation - always Hindi
+    async generateCompleteArticle(category) {
+        try {
+            // CHANGED: Always use Hindi (removed language determination)
+            const language = 'hindi';
+            
+            console.log(`🌟 Generating ${category} astrology article in Hindi...`);
+
+            // Generate dynamic topic in Hindi
             const topic = await this.topicGenerator.generateTopic(category, language);
-            console.log(`📝 Vedic Topic (${language}): ${topic}`);
+            console.log(`📝 Topic (Hindi): ${topic}`);
 
             const cleanTopic = this.cleanMarkdownFromTitle(topic);
-            const imageResult = await this.generateVedicImage(cleanTopic, category);
-            const contentResult = await this.generateVedicContent(cleanTopic, category, language);
+            const imageResult = await this.generateThemedImage(cleanTopic, category);
+            const contentResult = await this.generateAstrologyContent(cleanTopic, category, language);
 
             const article = new Article({
                 title: cleanTopic,
-                slug: this.generateHindiSlug(cleanTopic),
+                slug: this.generateSlug(cleanTopic),
                 content: contentResult.content,
                 category: category,
                 niche: this.config.niche,
                 siteId: this.siteId,
-                author: language === 'hindi' ? 'पंडित जी AstroAI' : this.config.author,
+                author: this.config.author,
                 featuredImage: imageResult ? imageResult.featuredImage : null,
                 originalImageUrl: imageResult ? imageResult.originalImageUrl : null,
                 imageKey: imageResult ? imageResult.imageKey : null,
                 imageUploaded: imageResult ? imageResult.imageUploaded : false,
                 seoTitle: cleanTopic.substring(0, 60),
                 metaDescription: this.generateMetaDescription(contentResult.content),
-                tags: this.generateVedicTags(cleanTopic, contentResult.content, category, language),
+                tags: this.generateAstrologyTags(cleanTopic, contentResult.content, category, language),
                 readingTime: this.calculateReadingTime(contentResult.content),
                 wordCount: this.countWords(contentResult.content),
                 publishedAt: new Date(),
                 aiModel: category.includes('daily') ? 'perplexity-sonar' : 'gemini-2.5-flash',
-                contentStyle: 'practical-vedic-wisdom',
+                contentStyle: 'practical-astrology',
                 
-                // Vedic-specific fields
-                language: language,
-                zodiacSign: contentResult.rashi,
-                planetaryInfluence: contentResult.graha,
-                isVedic: true,
-                culturalContext: 'hindu-indian'
+                // CHANGED: Always Hindi language fields
+                language: 'hindi', // Always Hindi
+                zodiacSign: contentResult.zodiacSign,
+                planetaryInfluence: contentResult.planet
             });
 
             const savedArticle = await article.save();
-            console.log(`✅ Vedic article generated in ${language}: ${savedArticle._id}`);
+            console.log(`✅ Hindi astrology article generated: ${savedArticle._id}`);
             
             return savedArticle;
 
         } catch (error) {
-            console.error('❌ Vedic article generation error:', error);
+            console.error('❌ Hindi astrology article generation error:', error);
             throw error;
         }
     }
 
-    // Helper methods
-    generateVedicTags(title, content, category, language) {
-        const baseTags = language === 'hindi' 
-            ? ['वैदिक ज्योतिष', 'राशिफल', 'हिंदू धर्म', 'प्राचीन ज্ान', 'संस्कृत', 'आयुर्वेद']
-            : ['vedic astrology', 'hindu scriptures', 'ancient wisdom', 'sanskrit', 'ayurveda', 'indian culture'];
+    // CHANGED: Helper methods - Hindi tags by default
+    generateAstrologyTags(title, content, category, language = 'hindi') {
+        // CHANGED: Always Hindi tags
+        const baseTags = ['ज्योतिष', 'राशिफल', 'वैदिक ज्योतिष', 'भविष्यवाणी', 'हिंदी ज्योतिष'];
             
         return [...baseTags, category, language];
     }
 
-    generateHindiSlug(title) {
-        // Convert Hindi title to URL-friendly slug
+    generateSlug(title) {
         return title
             .toLowerCase()
-            .replace(/[^\w\s\u0900-\u097F-]/g, '') // Keep Hindi characters
+            .replace(/[^\w\s-]/g, '')
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
             .substring(0, 60)
-            .trim();
-    }
-
-    generateVedicImage(topic, category) {
-        try {
-            console.log(`🎨 Generating Vedic astrology image for: ${topic}`);
-            return this.spacesService.generateAndUploadThemedImage(topic, category, 'vedic-hindu');
-        } catch (error) {
-            console.error('❌ Vedic image generation error:', error);
-            return null;
-        }
-    }
-
-    // Rest of helper methods remain the same
-    cleanMarkdownFromTitle(title) {
-        return title
-            .replace(/\*\*(.*?)\*\*/g, '$1')
-            .replace(/\*(.*?)\*/g, '$1')
-            .replace(/#{1,6}\s*/g, '')
-            .replace(/`(.*?)`/g, '$1')
-            .replace(/\n/g, ' ')
-            .replace(/"/g, '')
             .trim();
     }
 
@@ -739,6 +715,71 @@ Write the complete Vedic astrology article now:`;
         const textContent = content.replace(/<[^>]*>/g, '');
         return textContent.split(/\s+/).filter(word => word.length > 0).length;
     }
+
+    // Content generation with fallback strategy
+    async generateContentWithFallback(prompt) {
+        const models = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+        
+        for (const modelName of models) {
+            try {
+                const model = this.genAI.getGenerativeModel({ 
+                    model: modelName,
+                    generationConfig: {
+                        temperature: 0.7,
+                        topP: 0.8,
+                        topK: 40,
+                        maxOutputTokens: 4096,
+                    }
+                });
+                const result = await model.generateContent(prompt);
+                console.log(`✅ Hindi content generated successfully with ${modelName}`);
+                return result.response.text();
+            } catch (error) {
+                console.log(`⚠️ ${modelName} failed: ${error.message}`);
+                if (modelName === models[models.length - 1]) {
+                    throw error;
+                }
+                continue;
+            }
+        }
+    }
+
+    // Assess content quality
+    assessContentQuality(content) {
+        const wordCount = this.countWords(content);
+        const hasHeadings = content.includes('<h2>') || content.includes('<h3>');
+        const hasAstrologyTerms = /\b(राशि|ज्योतिष|astrology|zodiac|planet|horoscope|cosmic|vedic|ग्रह|नक्षत्र|भविष्य)\b/i.test(content);
+        const hasProperStructure = content.includes('<p>') && content.length > 500;
+        const hasCulturalTerms = /\b(रामायण|महाभारत|हनुमान|संस्कृत|वैदिक|प्राचीन|ramayana|mahabharata|hanuman|sanskrit|vedic|ancient)\b/i.test(content);
+        
+        let qualityScore = 0;
+        if (wordCount >= 1200) qualityScore += 25;
+        if (wordCount >= 800) qualityScore += 15;
+        if (hasHeadings) qualityScore += 25;
+        if (hasAstrologyTerms) qualityScore += 20;
+        if (hasProperStructure) qualityScore += 10;
+        if (hasCulturalTerms) qualityScore += 15;
+        
+        return {
+            wordCount: wordCount,
+            meetsMinimum: wordCount >= 1200,
+            hasStructure: hasHeadings,
+            hasAstrologyContent: hasAstrologyTerms,
+            hasCulturalElements: hasCulturalTerms,
+            overallScore: qualityScore,
+            grade: this.getQualityGrade(qualityScore)
+        };
+    }
+
+    // Get quality grade based on score
+    getQualityGrade(score) {
+        if (score >= 100) return 'Excellent';
+        if (score >= 85) return 'Very Good';
+        if (score >= 70) return 'Good';
+        if (score >= 55) return 'Fair';
+        return 'Needs Improvement';
+    }
 }
 
-module.exports = VedicContentGenerator;
+module.exports = AstrologyContentGenerator;
+

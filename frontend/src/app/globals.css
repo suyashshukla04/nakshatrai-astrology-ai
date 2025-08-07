@@ -4,216 +4,252 @@
 
 /* Smooth transitions for theme switching */
 * {
-transition-property: background-color, border-color, color, fill, stroke;
-transition-duration: 200ms;
-transition-timing-function: ease-in-out;
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
 }
 
 .no-transition * {
-transition: none !important;
+  transition: none !important;
 }
 
 /* Base layout fixes */
 html {
-scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-margin: 0;
-padding: 0;
-min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 /* Cosmic background effects */
 .cosmic-bg {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-position: relative;
-overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
 }
 
 .cosmic-bg::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-image:
-  radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-  radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-background-size: 100px 100px;
-animation: twinkle 3s ease-in-out infinite alternate;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 100px 100px;
+  animation: twinkle 3s ease-in-out infinite alternate;
 }
 
 /* Zodiac symbol styles */
 .zodiac-symbol {
-@apply text-2xl font-bold bg-gradient-to-r from-cosmic-400 to-mystical-400 bg-clip-text text-transparent;
+  @apply text-2xl font-bold bg-gradient-to-r from-cosmic-400 to-mystical-400 bg-clip-text text-transparent;
 }
 
 /* Article Content Typography */
 .article-content h1 {
-@apply text-3xl font-bold text-light-text dark:text-white mt-8 mb-6 leading-tight;
+  @apply text-3xl font-bold text-light-text dark:text-white mt-8 mb-6 leading-tight;
 }
 
 .article-content h2 {
-@apply text-2xl font-bold text-light-text dark:text-white mt-8 mb-4 leading-tight;
+  @apply text-2xl font-bold text-light-text dark:text-white mt-8 mb-4 leading-tight;
 }
 
 .article-content h3 {
-@apply text-xl font-bold text-light-text dark:text-white mt-6 mb-3 leading-tight;
+  @apply text-xl font-bold text-light-text dark:text-white mt-6 mb-3 leading-tight;
 }
 
 .article-content p {
-@apply text-light-text-secondary dark:text-gray-300 mb-4 leading-relaxed;
+  @apply text-light-text-secondary dark:text-gray-300 mb-4 leading-relaxed;
 }
 
 .article-content strong {
-@apply font-bold text-light-text dark:text-white;
+  @apply font-bold text-light-text dark:text-white;
 }
 
 .article-content em {
-@apply italic text-light-text dark:text-gray-200;
+  @apply italic text-light-text dark:text-gray-200;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-width: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-@apply bg-light-bg-secondary dark:bg-dark-bg-secondary;
+  @apply bg-light-bg-secondary dark:bg-dark-bg-secondary;
 }
 
 ::-webkit-scrollbar-thumb {
-@apply bg-cosmic-400 rounded-full;
+  @apply bg-cosmic-400 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-@apply bg-cosmic-500;
+  @apply bg-cosmic-500;
 }
 
 /* Selection styling */
 ::selection {
-@apply bg-cosmic-200 text-cosmic-900;
+  @apply bg-cosmic-200 text-cosmic-900;
 }
 
 .dark ::selection {
-@apply bg-cosmic-800 text-cosmic-100;
+  @apply bg-cosmic-800 text-cosmic-100;
 }
 
 /* Fix for line-clamp utilities */
 .line-clamp-2 {
-display: -webkit-box;
--webkit-line-clamp: 2;
--webkit-box-orient: vertical;
-overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .line-clamp-3 {
-display: -webkit-box;
--webkit-line-clamp: 3;
--webkit-box-orient: vertical;
-overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Image constraints */
 img {
-max-width: 100%;
-height: auto;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Loading states */
 .animate-pulse {
-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulse {
-0%,
-100% {
-  opacity: 1;
-}
-
-50% {
-  opacity: .5;
-}
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
 }
 
 /* Twinkle animation */
 @keyframes twinkle {
-0% {
-  opacity: 0.3;
-}
-
-100% {
-  opacity: 1;
-}
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .animate-twinkle {
-animation: twinkle 2s ease-in-out infinite alternate;
+  animation: twinkle 2s ease-in-out infinite alternate;
 }
 
 /* Button and interaction fixes */
 button:disabled {
-cursor: not-allowed;
-opacity: 0.6;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Focus states for accessibility */
 .focus-visible {
-@apply outline-none ring-2 ring-cosmic-500 ring-offset-2 ring-offset-light-bg dark:ring-offset-dark-bg;
+  @apply outline-none ring-2 ring-cosmic-500 ring-offset-2 ring-offset-light-bg dark:ring-offset-dark-bg;
 }
 
 /* Code blocks styling */
 pre {
-@apply bg-light-bg-tertiary dark:bg-gray-800 border border-light-border dark:border-gray-600 rounded-lg p-4 overflow-x-auto;
+  @apply bg-light-bg-tertiary dark:bg-gray-800 border border-light-border dark:border-gray-600 rounded-lg p-4 overflow-x-auto;
 }
 
 code {
-@apply bg-light-bg-secondary dark:bg-gray-800 text-light-text dark:text-gray-200 px-1 py-0.5 rounded text-sm;
-}
-
-/* Enhanced dark theme contrast */
-.dark strong {
-color: #ffffff !important;
-font-weight: 700;
-}
-
-.dark h1,
-.dark h2,
-.dark h3,
-.dark h4,
-.dark h5,
-.dark h6 {
-color: #ffffff !important;
-font-weight: 700;
-}
-
-.dark .text-light-text {
-color: #ffffff !important;
-}
-
-.dark .text-light-text-secondary {
-color: #d1d5db !important;
+  @apply bg-light-bg-secondary dark:bg-gray-800 text-light-text dark:text-gray-200 px-1 py-0.5 rounded text-sm;
 }
 
 /* Sanskrit/Hindi Font Support */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap');
 
 .sanskrit-text {
-font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-font-weight: 700;
-letter-spacing: 0.05em;
+  font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
 /* Hindi text enhancement */
 .hindi-text {
-font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-line-height: 1.6;
+  font-family: 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+/* TARGETED FIX: Only subheadings for dark mode visibility */
+.generated-content {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* Keep original light mode colors, only fix dark mode subheadings */
+.generated-content h1 {
+  @apply text-red-900 dark:text-red-200 font-bold text-2xl mb-4 mt-6;
+}
+
+.generated-content h2 {
+  @apply text-red-800 dark:text-red-100 font-bold text-xl mb-4 mt-6;
+}
+
+.generated-content h3 {
+  @apply text-red-700 dark:text-red-50 font-semibold text-lg mb-3 mt-5;
+}
+
+/* Keep paragraphs and other text unchanged - original colors */
+.generated-content p {
+  @apply text-red-900 dark:text-red-900 mb-4 leading-relaxed;
+}
+
+.generated-content strong {
+  @apply text-red-900 dark:text-red-900 font-bold;
 }
 
 /* Footer specific styling */
 .footer-gradient {
-background: linear-gradient(135deg, #c2410c 0%, #dc2626 50%, #ea580c 100%);
+  background: linear-gradient(135deg, #c2410c 0%, #dc2626 50%, #ea580c 100%);
 }
 
+/* Responsive Hindi text sizing */
+@media (max-width: 640px) {
+  .generated-content h1 {
+    @apply text-xl;
+  }
+  
+  .generated-content h2 {
+    @apply text-lg;
+  }
+  
+  .generated-content h3 {
+    @apply text-base;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dark .generated-content h1,
+  .dark .generated-content h2,
+  .dark .generated-content h3 {
+    color: #ffffff !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .cosmic-bg::before {
+    animation: none;
+  }
+}

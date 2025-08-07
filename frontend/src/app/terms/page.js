@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Terms of Service - Astrology AI Platform',
-  description: 'Terms of service for Astrology AI Platform website and AstroAI Master content.',
+  title: 'Terms of Service - NakshatraAI',
+  description: 'Terms of service for NakshatraAI website and AstroAI Master content.',
 };
 
 export default function TermsPage() {
@@ -20,7 +20,7 @@ export default function TermsPage() {
           
           <div className="prose prose-lg max-w-none">
             <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-2xl p-8 border border-light-border dark:border-dark-border mb-8">
-              <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-4">Welcome to Astrology AI Platform</h2>
+              <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-4">Welcome to NakshatraAI</h2>
               <p className="text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
                 These terms of service govern your use of our platform and the cosmic guidance provided by AstroAI Master. 
                 By accessing our website, you agree to these terms and embark on a journey of AI-powered astrological discovery.

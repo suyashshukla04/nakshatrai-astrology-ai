@@ -107,16 +107,17 @@ export function getAstrologyCategories() {
 }
 
 // Traditional Vedic Zodiac Signs (Rashis)
+// Traditional Vedic Zodiac Signs (Rashis) - With CORRECT Indian Date Ranges
 export function getVedicZodiacSigns() {
   return [
     { 
       id: 'mesha', 
       name: 'मेष', 
       english: 'Mesha (Aries)', 
-      symbol: '♈', 
+      symbol: '🐏',
       element: 'अग्नि', 
       elementEng: 'Fire',
-      dates: '21 मार्च - 19 अप्रैल',
+      dates: '15 मार्च - 14 अप्रैल', // CORRECTED Indian dates
       lord: 'मंगल',
       lordEng: 'Mars',
       nature: 'चर',
@@ -129,10 +130,10 @@ export function getVedicZodiacSigns() {
       id: 'vrishabha', 
       name: 'वृषभ', 
       english: 'Vrishabha (Taurus)', 
-      symbol: '♉', 
+      symbol: '🐂',
       element: 'पृथ्वी', 
       elementEng: 'Earth',
-      dates: '20 अप्रैल - 20 मई',
+      dates: '15 अप्रैल - 14 मई', // CORRECTED Indian dates
       lord: 'शुक्र',
       lordEng: 'Venus',
       nature: 'स्थिर',
@@ -145,10 +146,10 @@ export function getVedicZodiacSigns() {
       id: 'mithuna', 
       name: 'मिथुन', 
       english: 'Mithuna (Gemini)', 
-      symbol: '♊', 
+      symbol: '👫',
       element: 'वायु', 
       elementEng: 'Air',
-      dates: '21 मई - 20 जून',
+      dates: '15 मई - 14 जून', // CORRECTED Indian dates
       lord: 'बुध',
       lordEng: 'Mercury',
       nature: 'द्विस्वभाव',
@@ -161,10 +162,10 @@ export function getVedicZodiacSigns() {
       id: 'karka', 
       name: 'कर्क', 
       english: 'Karka (Cancer)', 
-      symbol: '♋', 
+      symbol: '🦀',
       element: 'जल', 
       elementEng: 'Water',
-      dates: '21 जून - 22 जुलाई',
+      dates: '15 जून - 14 जुलाई', // CORRECTED Indian dates
       lord: 'चंद्र',
       lordEng: 'Moon',
       nature: 'चर',
@@ -177,10 +178,10 @@ export function getVedicZodiacSigns() {
       id: 'simha', 
       name: 'सिंह', 
       english: 'Simha (Leo)', 
-      symbol: '♌', 
+      symbol: '🦁',
       element: 'अग्नि', 
       elementEng: 'Fire',
-      dates: '23 जुलाई - 22 अगस्त',
+      dates: '15 जुलाई - 14 अगस्त', // CORRECTED Indian dates
       lord: 'सूर्य',
       lordEng: 'Sun',
       nature: 'स्थिर',
@@ -193,10 +194,10 @@ export function getVedicZodiacSigns() {
       id: 'kanya', 
       name: 'कन्या', 
       english: 'Kanya (Virgo)', 
-      symbol: '♍', 
+      symbol: '👧',
       element: 'पृथ्वी', 
       elementEng: 'Earth',
-      dates: '23 अगस्त - 22 सितंबर',
+      dates: '15 अगस्त - 14 सितंबर', // CORRECTED Indian dates
       lord: 'बुध',
       lordEng: 'Mercury',
       nature: 'द्विस्वभाव',
@@ -209,10 +210,10 @@ export function getVedicZodiacSigns() {
       id: 'tula', 
       name: 'तुला', 
       english: 'Tula (Libra)', 
-      symbol: '♎', 
+      symbol: '⚖️',
       element: 'वायु', 
       elementEng: 'Air',
-      dates: '23 सितंबर - 22 अक्टूबर',
+      dates: '15 सितंबर - 14 अक्टूबर', // CORRECTED Indian dates
       lord: 'शुक्र',
       lordEng: 'Venus',
       nature: 'चर',
@@ -225,10 +226,10 @@ export function getVedicZodiacSigns() {
       id: 'vrishchika', 
       name: 'वृश्चिक', 
       english: 'Vrishchika (Scorpio)', 
-      symbol: '♏', 
+      symbol: '🦂',
       element: 'जल', 
       elementEng: 'Water',
-      dates: '23 अक्टूबर - 21 नवंबर',
+      dates: '15 अक्टूबर - 13 नवंबर', // CORRECTED Indian dates
       lord: 'मंगल',
       lordEng: 'Mars',
       nature: 'स्थिर',
@@ -241,10 +242,10 @@ export function getVedicZodiacSigns() {
       id: 'dhanu', 
       name: 'धनु', 
       english: 'Dhanu (Sagittarius)', 
-      symbol: '♐', 
+      symbol: '🏹',
       element: 'अग्नि', 
       elementEng: 'Fire',
-      dates: '22 नवंबर - 21 दिसंबर',
+      dates: '14 नवंबर - 13 दिसंबर', // CORRECTED Indian dates
       lord: 'बृहस्पति',
       lordEng: 'Jupiter',
       nature: 'द्विस्वभाव',
@@ -257,10 +258,10 @@ export function getVedicZodiacSigns() {
       id: 'makara', 
       name: 'मकर', 
       english: 'Makara (Capricorn)', 
-      symbol: '♑', 
+      symbol: '🐐',
       element: 'पृथ्वी', 
       elementEng: 'Earth',
-      dates: '22 दिसंबर - 19 जनवरी',
+      dates: '14 दिसंबर - 13 जनवरी', // CORRECTED Indian dates
       lord: 'शनि',
       lordEng: 'Saturn',
       nature: 'चर',
@@ -273,10 +274,10 @@ export function getVedicZodiacSigns() {
       id: 'kumbha', 
       name: 'कुम्भ', 
       english: 'Kumbha (Aquarius)', 
-      symbol: '♒', 
+      symbol: '🏺',
       element: 'वायु', 
       elementEng: 'Air',
-      dates: '20 जनवरी - 18 फरवरी',
+      dates: '14 जनवरी - 12 फरवरी', // CORRECTED Indian dates
       lord: 'शनि',
       lordEng: 'Saturn',
       nature: 'स्थिर',
@@ -289,10 +290,10 @@ export function getVedicZodiacSigns() {
       id: 'meena', 
       name: 'मीन', 
       english: 'Meena (Pisces)', 
-      symbol: '♓', 
+      symbol: '🐠',
       element: 'जल', 
       elementEng: 'Water',
-      dates: '19 फरवरी - 20 मार्च',
+      dates: '13 फरवरी - 14 मार्च', // CORRECTED Indian dates
       lord: 'बृहस्पति',
       lordEng: 'Jupiter',
       nature: 'द्विस्वभाव',
@@ -304,14 +305,15 @@ export function getVedicZodiacSigns() {
   ];
 }
 
-// Navagrahas (Nine Planets in Vedic Astrology)
+
+// Navagrahas (Nine Planets in Vedic Astrology) - Direct Hindi Symbol Implementation
 export function getNavagrahas() {
   return [
     { 
       id: 'surya', 
       name: 'सूर्य', 
       english: 'Surya (Sun)', 
-      symbol: '☉', 
+      symbol: '☀️', // Changed from ☉ to Hindi symbol
       element: 'अग्नि',
       day: 'रविवार',
       color: 'लाल',
@@ -326,7 +328,7 @@ export function getNavagrahas() {
       id: 'chandra', 
       name: 'चंद्र', 
       english: 'Chandra (Moon)', 
-      symbol: '☽', 
+      symbol: '🌙', // Changed from ☽ to Hindi symbol
       element: 'जल',
       day: 'सोमवार',
       color: 'सफ़ेद',
@@ -341,7 +343,7 @@ export function getNavagrahas() {
       id: 'mangal', 
       name: 'मंगल', 
       english: 'Mangal (Mars)', 
-      symbol: '♂', 
+      symbol: '🔴', // Changed from ♂ to Hindi symbol
       element: 'अग्नि',
       day: 'मंगलवार',
       color: 'लाल',
@@ -356,7 +358,7 @@ export function getNavagrahas() {
       id: 'budh', 
       name: 'बुध', 
       english: 'Budh (Mercury)', 
-      symbol: '☿', 
+      symbol: '💚', // Changed from ☿ to Hindi symbol
       element: 'पृथ्वी',
       day: 'बुधवार',
       color: 'हरा',
@@ -371,7 +373,7 @@ export function getNavagrahas() {
       id: 'brihaspati', 
       name: 'बृहस्पति', 
       english: 'Brihaspati (Jupiter)', 
-      symbol: '♃', 
+      symbol: '🟡', // Changed from ♃ to Hindi symbol
       element: 'आकाश',
       day: 'गुरुवार',
       color: 'पीला',
@@ -386,7 +388,7 @@ export function getNavagrahas() {
       id: 'shukra', 
       name: 'शुक्र', 
       english: 'Shukra (Venus)', 
-      symbol: '♀', 
+      symbol: '🤍', // Changed from ♀ to Hindi symbol
       element: 'जल',
       day: 'शुक्रवार',
       color: 'सफ़ेद',
@@ -401,7 +403,7 @@ export function getNavagrahas() {
       id: 'shani', 
       name: 'शनि', 
       english: 'Shani (Saturn)', 
-      symbol: '♄', 
+      symbol: '⚫', // Changed from ♄ to Hindi symbol
       element: 'वायु',
       day: 'शनिवार',
       color: 'काला',
@@ -416,7 +418,7 @@ export function getNavagrahas() {
       id: 'rahu', 
       name: 'राहु', 
       english: 'Rahu (North Node)', 
-      symbol: '☊', 
+      symbol: '🌫️', // Changed from ☊ to Hindi symbol
       element: 'वायु',
       day: 'शनिवार',
       color: 'धुआं रंग',
@@ -431,7 +433,7 @@ export function getNavagrahas() {
       id: 'ketu', 
       name: 'केतु', 
       english: 'Ketu (South Node)', 
-      symbol: '☋', 
+      symbol: '🟫', // Changed from ☋ to Hindi symbol
       element: 'अग्नि',
       day: 'मंगलवार',
       color: 'भूरा',
@@ -444,6 +446,7 @@ export function getNavagrahas() {
     }
   ];
 }
+
 
 // Vedic Houses (Bhavas)
 export function getVedicHouses() {

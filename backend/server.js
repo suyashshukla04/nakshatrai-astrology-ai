@@ -26,7 +26,7 @@ app.use('/api', spacesTestRoutes);
 
 // MongoDB connection for astrology platform
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/astroai')
-    .then(() => console.log('✅ MongoDB connected - Astrology AI Platform'))
+    .then(() => console.log('✅ MongoDB connected - NakshatraAI'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Initialize scheduler for astrology automation
@@ -35,7 +35,7 @@ scheduler.initializeAllSites();
 
 const PORT = process.env.BACKEND_PORT || 5001;
 app.listen(PORT, () => {
-    console.log(`🌟 Astrology AI Platform server running on port ${PORT}`);
+    console.log(`🌟 NakshatraAI server running on port ${PORT}`);
     console.log(`🔗 API endpoints: http://localhost:${PORT}/api`);
 });
 

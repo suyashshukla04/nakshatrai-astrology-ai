@@ -150,11 +150,11 @@ export default function Footer() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs">
               <div className="flex items-center bg-yellow-600/20 px-3 py-1 rounded-full">
                 <span className="mr-1">⚡</span>
-                <span>Gemini 2.5 Flash AI</span>
+                <span>Our AstroAI Agent</span>
               </div>
               <div className="flex items-center bg-orange-600/20 px-3 py-1 rounded-full">
                 <span className="mr-1">🔍</span>
-                <span>Perplexity Real-time Data</span>
+                <span>Modern Thinking</span>
               </div>
               <div className="flex items-center bg-red-600/20 px-3 py-1 rounded-full">
                 <span className="mr-1">📚</span>

@@ -178,7 +178,7 @@ router.get('/test/status', async (req, res) => {
         res.json({
             success: true,
             systemStatus: 'operational',
-            platform: 'Astrology AI Platform',
+            platform: 'NakshatraAI',
             ...status,
             timestamp: new Date()
         });
@@ -233,7 +233,7 @@ router.post('/test/bulk/:siteId', async (req, res) => {
         res.json({
             success: true,
             siteId,
-            platform: 'Astrology AI Platform',
+            platform: 'NakshatraAI',
             totalCategories: categoryIds.length,
             results
         });

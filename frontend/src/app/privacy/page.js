@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Privacy Policy - Astrology AI Platform',
-  description: 'Privacy policy for Astrology AI Platform and AstroAI Master content generation.',
+  title: 'Privacy Policy - NakshatraAI',
+  description: 'Privacy policy for NakshatraAI and AstroAI Master content generation.',
 };
 
 export default function PrivacyPage() {
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
             <div className="bg-light-bg-secondary dark:bg-dark-bg-secondary rounded-2xl p-8 border border-light-border dark:border-dark-border mb-8">
               <h2 className="text-2xl font-bold text-light-text dark:text-dark-text mb-4">Our Commitment to Your Privacy</h2>
               <p className="text-light-text-secondary dark:text-dark-text-secondary leading-relaxed">
-                At Astrology AI Platform, we respect your cosmic energy and personal information. This privacy policy explains 
+                At NakshatraAI, we respect your cosmic energy and personal information. This privacy policy explains 
                 how we collect, use, and protect your information when you interact with AstroAI Master and our services.
               </p>
             </div>
