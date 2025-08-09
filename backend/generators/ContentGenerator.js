@@ -582,32 +582,52 @@ class AstrologyContentGenerator {
     }
 
     // Generate with Perplexity (for real-time content) - UPDATED Hindi prompt
+    // async generateWithPerplexity(prompt) {
+    //     const response = await fetch('https://api.perplexity.ai/chat/completions', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Authorization': `Bearer ${this.perplexityApiKey}`,
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //             model: 'sonar',
+    //             messages: [{ 
+    //                 role: 'user', 
+    //                 content: prompt + "\n\nकृपया उत्तर हिंदी में दें।" // Always request Hindi response
+    //             }],
+    //             max_tokens: 1000,
+    //             temperature: 0.7,
+    //             top_p: 0.8,
+    //             stream: false
+    //         })
+    //     });
+
+    //     if (!response.ok) {
+    //         throw new Error(`Perplexity API error: ${response.status}`);
+    //     }
+
+    //     const data = await response.json();
+    //     return data.choices[0].message.content;
+    // }
     async generateWithPerplexity(prompt) {
-        const response = await fetch('https://api.perplexity.ai/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.perplexityApiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'sonar',
-                messages: [{ 
-                    role: 'user', 
-                    content: prompt + "\n\nकृपया उत्तर हिंदी में दें।" // Always request Hindi response
-                }],
-                max_tokens: 1000,
-                temperature: 0.7,
-                top_p: 0.8,
-                stream: false
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Perplexity API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.choices[0].message.content;
+    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${this.perplexityApiKey}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: 'sonar',
+            messages: [{ 
+                role: 'user', 
+                content: prompt + "\n\nकृपया उत्तर हिंदी में दें।"
+            }],
+            max_tokens: 4000, // Increased to 4000
+            temperature: 0.7,
+            top_p: 0.8,
+            stream: false
+        })
+    });
     }
 
     // Generate with Gemini (for analytical content)
