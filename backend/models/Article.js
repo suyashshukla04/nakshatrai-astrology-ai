@@ -97,6 +97,6 @@ const articleSchema = new mongoose.Schema({
 // Indexes for astrology queries
 articleSchema.index({ siteId: 1, category: 1, publishedAt: -1 });
 articleSchema.index({ language: 1, zodiacSign: 1 });
-articleSchema.index({ slug: 1 }, { unique: true });
+articleSchema.index({ slug: 1 });
 
 module.exports = mongoose.model('AstrologyArticle', articleSchema);
